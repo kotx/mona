@@ -1,5 +1,5 @@
 tasks:
-  - name: Install flyctl
+  - name: Setup workspace
     init: |
       curl -L https://fly.io/install.sh | sh
 
@@ -7,8 +7,13 @@ tasks:
       export PATH="$FLYCTL_INSTALL/bin:$PATH"' > $HOME/.bash_profile
 
       source $HOME/.bash_profile
-  - name: Install dependencies (npm)
-    init: npm install
+
+      npx --yes playwright install-deps
+      npx --yes playwright install
+
+      npm install
+  - name: Start dev server
+    command: npm run dev
 
 github:
   prebuilds:

@@ -1,26 +1,12 @@
 # yuktec/mona
 
-## Fly Setup
-
-1. [Install Fly](https://fly.io/docs/getting-started/installing-flyctl/)
-
-2. Sign up and log in to Fly
-
-   ```sh
-   flyctl auth signup
-   ```
-
-3. Setup Fly. It might ask if you want to deploy, say no since you haven't built the app yet.
-
-   ```sh
-   flyctl launch
-   ```
-
 ## Development
 
 From your terminal:
 
 ```sh
+npx playwright install-deps
+npx playwright install
 npm run dev
 ```
 

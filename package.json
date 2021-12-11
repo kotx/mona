@@ -4,7 +4,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev",
-    "postinstall": "remix setup node && playwright install && playwright install-deps",
+    "postinstall": "remix setup node",
     "deploy": "flyctl deploy",
     "start": "remix-serve build"
   },
