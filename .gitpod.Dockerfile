@@ -1,4 +1,4 @@
-FROM gitpod/workspace-full
+FROM gitpod/workspace-postgres
 
 RUN npx --yes playwright install
 RUN npx --yes playwright install-deps
