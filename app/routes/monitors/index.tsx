@@ -16,7 +16,7 @@ type MonitorIndex = {
 export const action: ActionFunction = async ({ request }) => {
     const form = await request.formData()
     const url = form.get("url")?.toString()
-    const name = form.get("name")?.toString() ?? new URL(url!).hostname
+    const name = form.get("name")?.toString() ?? new URL(url!).hostname ?? url!
 
     if (url === undefined)
         throw json("Missing URL", { status: 400 })
