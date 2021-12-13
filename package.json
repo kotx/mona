@@ -4,7 +4,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev",
-    "postinstall": "remix setup node",
+    "postinstall": "remix setup node && prisma generate",
     "deploy": "flyctl deploy",
     "start": "remix-serve build"
   },
