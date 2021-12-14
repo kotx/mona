@@ -12,7 +12,10 @@ tasks:
       source $HOME/.bash_profile
 
       npm install
-    command: gh auth login && gh auth setup-git
+    command: |
+      BROWSER="echo Please go to" gh auth login --web
+      gh auth setup-git
+
   - name: Start dev server
     command: npm run dev
 
