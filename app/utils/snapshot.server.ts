@@ -6,7 +6,7 @@ export async function createSnapshot(monitor: Monitor) {
     try {
         const scrot = await screenshotPage(monitor.url)
 
-        return await db.snapshot.create({
+        const snapshot = await db.snapshot.create({
             data: {
                 screenshot: scrot,
                 source: "TODO",
@@ -14,16 +14,33 @@ export async function createSnapshot(monitor: Monitor) {
                 monitorId: monitor.id
             }
         })
-    } catch (e) {
-        await db.monitor.update({
-            where: {
-                id: monitor.id
-            },
-            data: {
-                broken: true
-            }
-        })
 
-        throw e
+        if (monitor.broken) {
+            try {
+                await db.monitor.update({
+                    where: {
+                        id: monitor.id
+                    },
+                    data: {
+                        broken: false
+                    }
+                })
+            } catch (err) { throw err }
+        }
+
+        return snapshot
+    } catch (err) {
+        try {
+            await db.monitor.update({
+                where: {
+                    id: monitor.id
+                },
+                data: {
+                    broken: true
+                }
+            })
+        } catch (err) { throw err }
+
+        throw err
     }
 }

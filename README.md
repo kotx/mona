@@ -12,6 +12,12 @@ npm run dev
 
 This starts your app in development mode, rebuilding assets on file changes.
 
+### TODOs
+- Everything marked with a `TODO` comment (a lot)
+- `sfn-scheduler` must be replaced- it is deprecated (https://github.com/hyurl/sfn-scheduler/issues/1)
+- Some sort of WebSocket/event socket for informing the client of new snapshots
+- Some way to 'diff' snapshots (thru html or the screenshot)
+
 ## Deployment
 
 If you've followed the setup instructions already, all you need to do is run this:

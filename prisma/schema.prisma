@@ -8,10 +8,13 @@ datasource db {
 }
 
 model Monitor {
-  name      String
-  url       String
-  active    Boolean    @default(false)
-  broken    Boolean    @default(false)
+  name String
+  url  String
+
+  active   Boolean @default(false)
+  broken   Boolean @default(false)
+  interval String
+
   email     String
   snapshots Snapshot[]
 

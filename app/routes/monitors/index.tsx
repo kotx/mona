@@ -2,11 +2,14 @@ import { Monitor, Snapshot } from "@prisma/client"
 import { ActionFunction, Form, json, Link, MetaFunction, redirect, useLoaderData, useTransition } from "remix"
 import { db } from "~/utils/db.server"
 import { createSnapshot } from "~/utils/snapshot.server"
+import { Schedule } from "sfn-scheduler"
+import { setMonitor } from "~/utils/scheduler.server"
 
 type MonitorIndex = {
     id: number
     name: string
     url: string
+    interval: string
     active: boolean
     broken: boolean
     latestSnapshot?: number
@@ -17,20 +20,30 @@ export const action: ActionFunction = async ({ request }) => {
     const form = await request.formData()
     const url = form.get("url")?.toString()
     const name = form.get("name")?.toString() ?? new URL(url!).hostname ?? url!
+    const interval = form.get("interval")?.toString()
 
     if (url === undefined)
         throw json("Missing URL", { status: 400 })
+
+    if (interval === undefined)
+        throw json("Missing interval", { status: 400 })
 
     const monitor = await db.monitor.create({
         data: {
             email: "kot@yukata.tech", // TODO
             name: name!,
             url,
-            active: false
+            interval,
+            active: false,
         }
     })
 
-    await createSnapshot(monitor)
+    try {
+        await createSnapshot(monitor)
+        await setMonitor(monitor)
+    } catch (err) {
+        throw err
+    }
 
     return redirect(`/monitors/${monitor.id}`)
 }
@@ -50,6 +63,7 @@ export async function loader() {
             id: m.id,
             name: m.name,
             url: m.url,
+            interval: m.interval,
             active: m.active,
             latestSnapshot: m.snapshots.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()).at(-1)?.id,
             updatedAt: m.updatedAt
@@ -110,6 +124,12 @@ export default function Index() {
                         <p>
                             <label>URL
                                 <input type="url" name="url" placeholder="https://example.com" required />
+                            </label>
+                        </p>
+
+                        <p>
+                            <label>Frequency of captures
+                                <input type="text" name="interval" placeholder="every 2 hours" required />
                             </label>
                         </p>
 

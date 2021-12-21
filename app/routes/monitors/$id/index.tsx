@@ -8,6 +8,7 @@ type MonitorInfo = {
     url: string
     active: boolean
     broken: boolean
+    interval: string
     snapshots: SnapshotInfo[]
 }
 
@@ -88,6 +89,8 @@ export default function Info() {
                 {m.name !== m.url &&
                     <p><i>{m.url}</i></p>
                 }
+
+                <p>{m.interval}</p>
 
                 <div className="button-group">
                     <Form method="post">
